@@ -10,17 +10,20 @@ public class Runigram {
 		//// Hide / change / add to the testing code below, as needed.
 		
 		// Tests the reading and printing of an image:	
-		Color[][] tinypic = read("tinypic.ppm");
-		print(tinypic);
-
+		//Color[][] tinypic = read("tinypic.ppm");
+		//print(tinypic);
+		Color c1 = new Color(100, 40, 100);
+		Color c2 = new Color(200, 20, 40);
+		Color blendedColor = blend(c1,c2, 0.25);
+		print(blendedColor);
 		// Creates an image which will be the result of various 
 		// image processing operations:
-		Color[][] imageOut;
+		//Color[][] imageOut;
 
 		// Tests the horizontal flipping of an image:
-		imageOut = scaled(tinypic, 3, 5);
-		System.out.println();
-		print(imageOut);
+		//imageOut = scaled(tinypic, 3, 5);
+		//System.out.println();
+		//print(imageOut);
 		
 		//// Write here whatever code you need in order to test your work.
 		//// You can reuse / overide the contents of the imageOut array.
@@ -151,8 +154,11 @@ public class Runigram {
 	 * values in the two input color.
 	 */
 	public static Color blend(Color c1, Color c2, double alpha) {
-		//// Replace the following statement with your code
-		return null;
+		int red = ((int)(alpha*c1.getRed() + (1-alpha) * c2.getRed()));  
+		int green = (int)(alpha*c1.getGreen() + (1-alpha)*c2.getGreen()); 
+		int blue = (int)(alpha*c1.getBlue() + (1-alpha)*c2.getBlue()); 
+		Color blendedColor = new Color(red, green, blue);
+		return blendedColor;
 	}
 	
 	/**
@@ -162,8 +168,14 @@ public class Runigram {
 	 * The two images must have the same dimensions.
 	 */
 	public static Color[][] blend(Color[][] image1, Color[][] image2, double alpha) {
-		//// Replace the following statement with your code
-		return null;
+		Color[][] blendedImage = new Color[image1.length][image1[0].length];
+		for (int i = 0; i< image1.length; i++) {
+			for (int j = 0; j < image1[0].length; j++) {
+				blendedImage[i][j] = blend(image1[i][j], image2[i][j], alpha);
+			
+			}	
+		}
+		return blendedImage;
 	}
 
 	/**
@@ -173,7 +185,16 @@ public class Runigram {
 	 * of the source image.
 	 */
 	public static void morph(Color[][] source, Color[][] target, int n) {
-		//// Replace this comment with your code
+		if (source.length != target.length || source[0].length != target[0].length){
+			target = scaled(target,  source[0].length, source.length);
+		} 
+		Color morphedImage[][] = new Color[source.length][source[0].length];
+		
+		for (int i = 0; i < n; i++) {
+			morphedImage = blend(source, target, (double)((n-i)/n));
+			display(morphedImage);
+			StdDraw.pause(1500);
+		}
 	}
 	
 	/** Creates a canvas for the given image. */
